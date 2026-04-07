@@ -159,34 +159,31 @@ function App() {
 
           <h3 className="font-bold text-lg">Transfer</h3>
           <form method="dialog" className="flex flex-col gap-3.5" onSubmit={async () => {
-            try {
-              if (!selectedToken) {
-                const error = "No selected token!";
-                setResult(() => `ERRROR: ${error}`);
-                throw error;
-              }
+            const transferTo = transferDestinationRef.current?.value as Address;
+            const transferValue = Number(`${transferAmountRef.current?.value}`);
 
-              const { status, transactionHash } = await sendToken({
-                policyID: selectedToken.policyID,
-                transferFrom: address,
-                transferTo: transferDestinationRef.current?.value as Address,
-                transferValue: Number(`${transferAmountRef.current?.value}`),
-                decimals: selectedToken.decimals,
-              });
+            transferDestinationRef.current!.value = "";
+            transferAmountRef.current!.value = "";
 
-              if (status != "success") {
-                const error = "Failed transferring token!";
-                setResult(() => `ERRROR: ${error}`);
-                throw error;
-              }
-
-              setResult(() => `TxHash: ${transactionHash}`);
-            } catch (error) {
+            if (!selectedToken) {
+              const error = "No selected token!";
+              setResult(() => `ERRROR: ${error}`);
               throw error;
-            } finally {
-              transferDestinationRef.current!.value = "";
-              transferAmountRef.current!.value = "";
             }
+
+            const { status, transactionHash } = await sendToken({
+              policyID: selectedToken.policyID,
+              transferFrom: address, transferTo,
+              transferValue, decimals: selectedToken.decimals,
+            });
+
+            if (status != "success") {
+              const error = "Failed transferring token!";
+              setResult(() => `ERRROR: ${error}`);
+              throw error;
+            }
+
+            setResult(() => `TxHash: ${transactionHash}`);
           }}>
             <input type="text" placeholder="Recipient" required className="input input-primary w-full" ref={transferDestinationRef} />
             <input type="number" placeholder="Amount" min={0} required className="input input-primary w-full" ref={transferAmountRef} />
