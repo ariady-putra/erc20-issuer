@@ -167,7 +167,7 @@ function App() {
 
             if (!selectedToken) {
               const error = "No selected token!";
-              setResult(() => `ERRROR: ${error}`);
+              setResult(() => `ERROR: ${error}`);
               throw error;
             }
 
@@ -179,7 +179,7 @@ function App() {
 
             if (status != "success") {
               const error = "Failed transferring token!";
-              setResult(() => `ERRROR: ${error}`);
+              setResult(() => `ERROR: ${error}`);
               throw error;
             }
 
