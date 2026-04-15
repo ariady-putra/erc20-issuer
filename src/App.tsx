@@ -8,7 +8,7 @@ import ERC20Issuer from "../foundry/out/Issuer.sol/Issuer.json";
 import "./App.css";
 
 const client = createWalletClient({
-  chain: import.meta.env.VITE_SEPOLIA ? sepolia : localhost,
+  chain: import.meta.env.VITE_LOCALHOST ? localhost : sepolia,
   transport: custom(window.ethereum!),
 }).extend(publicActions);
 
